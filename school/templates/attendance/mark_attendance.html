@@ -1,0 +1,47 @@
+<h2>Mark Attendance</h2>
+
+<form method="get">
+    <label>Select Classroom:</label>
+    <select name="classroom" onchange="this.form.submit()">
+        <option value="">-- Select --</option>
+        {% for room in classrooms %}
+        <option value="{{ room.name }}" {% if room.name == selected_classroom %}selected{% endif %}>{{ room.name }}</option>
+        {% endfor %}
+    </select>
+</form>
+
+<form method="post">
+    {% csrf_token %}
+    <label>Date:</label>
+    <input type="date" name="date" value="{{ today }}">
+    
+    {% if students %}
+    <h3>Students</h3>
+    <table border="1">
+        <tr>
+            <th>Name</th><th>Present</th>
+        </tr>
+        {% for student in students %}
+        <tr>
+            <td>{{ student.first_name }} {{ student.last_name }}</td>
+            <td><input type="checkbox" name="student_{{ student.id }}"></td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+    <h3>Teachers</h3>
+    <table border="1">
+        <tr>
+            <th>Name</th><th>Present</th>
+        </tr>
+        {% for teacher in teachers %}
+        <tr>
+            <td>{{ teacher.first_name }} {{ teacher.last_name }}</td>
+            <td><input type="checkbox" name="teacher_{{ teacher.id }}"></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <button type="submit">Save Attendance</button>
+</form>
